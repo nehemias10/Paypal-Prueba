@@ -20,12 +20,19 @@ export default function Paypal() {
             ],
           });
         },
-        onApprove: async (data, actions) => {
-          const order = await actions.order.capture();
-          console.log(order);
+        onApprove: function (data, actions) {
+          return actions.order.capture().then(function (details) {
+              window.location.href = "approve.html";
+          });
+        },
+
+        onCancel: function (data, actions) {
+          window.location.replace("cancel.html")
         },
         onError: (err) => {
-          console.log(err);
+          return actions.order.capture().then(function (none) {
+            window.location.href = "cancel.html";
+        });
         },
       })
       .render(paypal.current);
